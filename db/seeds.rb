@@ -140,7 +140,7 @@ throw "Invalid Subject Count" if Subject.count != 6
 @subjects = Subject.all
 
 
-if Upload.count != 63
+if Upload.count != 84
   @subjects.each do |s|
     @grade_bands.each do |gb|
       # don't create grades 3 and 6 for Hem (Chemistry) and Fiz (Physics)
@@ -169,38 +169,43 @@ if Upload.count != 63
           status: 0,
           filename: "#{s.code}_#{gb.code}_sr.csv"
         )
+        Upload.create(
+          subject_id: s.id,
+          grade_band_id: gb.id,
+          locale_id: @loc_en.id,
+          status: 0,
+          filename: "#{s.code}_#{gb.code}_en.csv"
+        )
       end
     end
   end
-  Upload.create(
-    subject_id: @hem.id,
-    grade_band_id: @gb_09.id,
-    locale_id: @loc_en.id,
-    status: 0,
-    filename: 'Hem_9_en.csv'
-  )
-  Upload.create(
-    subject_id: @hem.id,
-    grade_band_id: @gb_13.id,
-    locale_id: @loc_en.id,
-    status: 0,
-    filename: 'Hem_13_en.csv'
-  )
-  Upload.create(
-    subject_id: @mat.id,
-    grade_band_id: @gb_03.id,
-    locale_id: @loc_en.id,
-    status: 0,
-    filename: 'mat_3_en.csv'
-  )
+  # Upload.create(
+  #   subject_id: @hem.id,
+  #   grade_band_id: @gb_09.id,
+  #   locale_id: @loc_en.id,
+  #   status: 0,
+  #   filename: 'Hem_9_en.csv'
+  # )
+  # Upload.create(
+  #   subject_id: @hem.id,
+  #   grade_band_id: @gb_13.id,
+  #   locale_id: @loc_en.id,
+  #   status: 0,
+  #   filename: 'Hem_13_en.csv'
+  # )
+  # Upload.create(
+  #   subject_id: @mat.id,
+  #   grade_band_id: @gb_03.id,
+  #   locale_id: @loc_en.id,
+  #   status: 0,
+  #   filename: 'mat_3_en.csv'
+  # )
 end
 # valid count:
-#   2 english for testing (will eventually be replaced by real ones)
-#   1 english for real
-#   + 72 (4 grade bands * 6 subjects * 3 languages)
+#   96 (4 grade bands * 6 subjects * 4 languages)
 #   - 12 physics and chemistry for grades 3 and 6 for 3 languages
-#   = 63 valid uploads
-throw "Invalid Upload Count" if Upload.count != 63
+#   = 84 valid uploads
+throw "Invalid Upload Count" if Upload.count != 84
 @hem_09 = Upload.where(filename: 'Hem_9_en.csv').first
 @hem_13 = Upload.where(filename: 'Hem_13_en.csv').first
 @bio_03 = Upload.where(filename: 'Bio_3_bs.csv').first
