@@ -159,14 +159,27 @@ class UploadsController < ApplicationController
         Rails.logger.debug("*** second line read: #{line.inspect}")
         infoLine = line.split(',')
         # Rails.logger.debug("*** second infoLine: #{line.inspect}")
+        # detect if shifted over for english extra row column
+        gradeCol = 0
+        Rails.logger.debug("*** infoLine[2]: #{infoLine[2].inspect}")
+        Rails.logger.debug("*** infoLine[3]: #{infoLine[3].inspect}")
+        Rails.logger.debug("*** infoLine[4]: #{infoLine[4].inspect}")
+        Rails.logger.debug("*** infoLine[5]: #{infoLine[5].inspect}")
+        if infoLine[1].strip === 'Raspon:' || infoLine[1].strip === 'Grade Band:'
+          gradeCol = 2
+        elsif infoLine[2].strip === 'Raspon:' || infoLine[2].strip === 'Grade Band:'
+          gradeCol = 3
+        elsif infoLine[3].strip == 'Raspon:' || infoLine[3].strip == 'Grade Band:'
+          gradeCol = 4
+        end
         grade_band = 0
         begin
-          grade_band = Integer(infoLine[4])
+          grade_band = Integer(infoLine[gradeCol])
         rescue ArgumentError, TypeError
           grade_band = 0
         end
-        Rails.logger.debug("*** infoLine[3]: #{infoLine[3].inspect}")
-        raise "Invalid grade band on second header row: #{infoLine[3]}: #{infoLine[4]}" if (infoLine[3] != 'Raspon:' && infoLine[3] != 'Grade Band:') || grade_band ==  0
+        Rails.logger.debug("*** infoLine[gradeCol]: #{infoLine[gradeCol].inspect}")
+        raise "Invalid grade band on second header row: #{gradeCol} - #{infoLine[gradeCol].inspect}" if gradeCol == 0 || grade_band == 0
         # Create your CSV object using the remainder of the stream.
         csv = CSV.new file, headers: true
         Rails.logger.debug("*** get csv rows")
@@ -544,7 +557,7 @@ class UploadsController < ApplicationController
           end # if save_status ...
 
           # statMsg = "#{BaseRec::SAVE_CODE_STATUS[save_status]}"
-          statMsg = I18n.translate('uploads.labels.saved_code', code: builtCode) if save_status == BaseRec::REC_ADDED || save_status == BaseRec::REC_UPDATED
+          statMsg = I18n.translate('uploads.labels.saved_code', code: recCode) if save_status == BaseRec::REC_ADDED || save_status == BaseRec::REC_UPDATED
           statMsg = statMsg.blank? ? "#{@rowErrs.join(', ')}" : statMsg + ", #{@rowErrs.join(', ')}" if @rowErrs.count > 0
 
           # generate report record if not skipped

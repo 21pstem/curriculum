@@ -3,8 +3,10 @@ class Tree < BaseRec
   # Note: Found english version of letters mixed in with cryllic
   # mapped english version of cyrillic letters to match the corresponding english letter so both versions of the letter would map out properly to the english
   # then mapped cyrillic letters, so english to cyrillic would return cryllic
-  INDICATOR_SEQ_ENG = ['a','e','j','k','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p']
-  INDICATOR_SEQ_CYR = ['a','e','j','k','а','б','в','г','д','ђ','е','ж','з','и','ј','к','л','љ','м','н']
+  # INDICATOR_SEQ_ENG = ['a','e','j','k','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','c']
+  # INDICATOR_SEQ_CYR = ['a','e','j','k','а','б','в','г','д','ђ','е','ж','з','и','ј','к','л','љ','м','н','ц']
+  INDICATOR_SEQ_ENG = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p']
+  INDICATOR_SEQ_CYR = ['а', 'б', 'ц', 'д', 'е', 'ф', 'г', 'х', 'и', 'ј', 'к', 'л', 'м', 'н', 'о', 'п']
   # hash to return english letter for cyrillic letter
   GET_ENG_IND_H = INDICATOR_SEQ_CYR.zip(INDICATOR_SEQ_ENG).to_h
   # hash to return cyrillic letter for english letter
